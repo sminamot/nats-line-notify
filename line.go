@@ -8,12 +8,13 @@ import (
 )
 
 type Line struct {
-	Message    string `json:"message"`
-	ImageURL   string `json:"image_url"`
-	RetryCount int    `json:"retry_count"`
+	Message     string `json:"message"`
+	ImageURL    string `json:"image_url"`
+	RetryCount  int    `json:"retry_count"`
+	AccessToken string `json:"access_token"`
 }
 
-func (s *Line) Notify(token string) error {
+func (s *Line) Notify() error {
 	buf := bytes.Buffer{}
 	mw := multipart.NewWriter(&buf)
 	mw.WriteField("message", s.Message)
@@ -29,7 +30,7 @@ func (s *Line) Notify(token string) error {
 	}
 
 	req.Header.Add("Content-Type", mw.FormDataContentType())
-	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Authorization", "Bearer "+s.AccessToken)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err

@@ -10,20 +10,18 @@ import (
 )
 
 var (
-	natsServer      string
-	natsChannel     string
-	natsQueueGroup  string
-	lineAccessToken string
+	natsServer     string
+	natsChannel    string
+	natsQueueGroup string
 )
 
 func init() {
 	natsServer = os.Getenv("NATS_SERVER")
 	natsChannel = os.Getenv("NATS_CHANNEL")
 	natsQueueGroup = os.Getenv("NATS_GROUP")
-	lineAccessToken = os.Getenv("LINE_ACCESS_TOKEN")
 
 	switch "" {
-	case natsServer, natsChannel, natsQueueGroup, lineAccessToken:
+	case natsServer, natsChannel, natsQueueGroup:
 		log.Fatalln("specify environment variable")
 	}
 
@@ -74,5 +72,5 @@ func main() {
 }
 
 func subscribeFunc(s *line.Line) {
-	s.Notify(lineAccessToken)
+	s.Notify()
 }
